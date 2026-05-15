@@ -4,6 +4,8 @@ JobHunter is a local-first career management system for running a focused job se
 
 The app is intentionally small: dependency-free browser UI, plain Node.js orchestrator, local state persistence, and optional provider-backed AI drafting through Ollama, OpenAI, Claude, or Gemini.
 
+<img width="1440" height="900" alt="JobHunter GitHub screenshot" src="https://github.com/user-attachments/assets/7e8974c1-e2e9-450e-b8dc-62a26109a535" />
+
 ## What It Does
 
 - Guided onboarding and contextual help for the full workflow.
