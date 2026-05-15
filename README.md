@@ -1,6 +1,6 @@
 # JobHunter
 
-JobHunter is a local-first career management system for running a focused job search from one workspace: tune a profile, scan job sources, rate fit, prepare application packs, and track the pipeline.
+JobHunter is a LLM provider agnostic career management system for running a focused job search from one workspace: tune a profile, scan job sources, rate fit, prepare application packs, and track the pipeline.
 
 The app is intentionally small: dependency-free browser UI, plain Node.js orchestrator, local state persistence, and optional provider-backed AI drafting through Ollama, OpenAI, Claude, or Gemini.
 
