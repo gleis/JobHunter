@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JobHunter</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <div class="brand">
+          <div class="brand-mark">JH</div>
+          <div>
+            <h1>JobHunter</h1>
+            <p>Agentic search desk</p>
+          </div>
+        </div>
+
+        <nav class="nav-list">
+          <button class="nav-item is-active" data-view="command">
+            <span>Command</span>
+            <strong id="navActiveCount">0</strong>
+          </button>
+          <button class="nav-item" data-view="scanner">
+            <span>Job Scanner</span>
+            <strong id="navScanCount">0</strong>
+          </button>
+          <button class="nav-item" data-view="rater">
+            <span>Job Rater</span>
+            <strong id="navRatedCount">0</strong>
+          </button>
+          <button class="nav-item" data-view="applier">
+            <span>Job Applier</span>
+            <strong id="navApplyCount">0</strong>
+          </button>
+          <button class="nav-item" data-view="tracker">
+            <span>Job Tracker</span>
+            <strong id="navTrackerCount">0</strong>
+          </button>
+          <button class="nav-item" data-view="profile">
+            <span>My Profile</span>
+            <strong id="navProfileCount">0</strong>
+          </button>
+          <button class="nav-item" data-view="sources">
+            <span>Search Sources</span>
+            <strong id="navSourceCount">0</strong>
+          </button>
+        </nav>
+
+        <section class="agent-card">
+          <div class="agent-orb" aria-hidden="true"></div>
+          <p class="eyebrow">Agent status</p>
+          <h2 id="agentMode">Ready to triage</h2>
+          <p id="agentSummary">Paste a role, scan seeded boards, or let the pipeline prioritize your next move.</p>
+        </section>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Career management system</p>
+            <h2 id="viewTitle">Command Center</h2>
+          </div>
+          <div class="topbar-actions">
+            <button class="ghost-button" id="exportButton" type="button">Export JSON</button>
+            <button class="ghost-button" id="restartOnboardingButton" type="button">Start guide</button>
+            <button class="ghost-button" id="openHelpButton" type="button">Help</button>
+            <button class="primary-button" id="runPipelineButton" type="button">Run agent pipeline</button>
+          </div>
+        </header>
+
+        <section class="view-panel is-active" id="commandView" data-view-panel="command">
+          <div class="tip-box">
+            <strong>Tip: set the search brief first</strong>
+            <p>Use Profile to describe the roles you want, required terms, and anything you do not want returned. Use Sources to control where the scanner looks.</p>
+          </div>
+          <div class="hero-grid">
+            <section class="intake-panel">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">New opportunity</p>
+                  <h3>Paste a job URL or description</h3>
+                </div>
+                <div class="heading-actions">
+                  <span class="quiet-pill">Human approval required</span>
+                  <button class="help-button" data-help-topic="command" type="button" aria-label="Help with manual job intake">?</button>
+                </div>
+              </div>
+              <form id="jobForm" class="job-form">
+                <label>
+                  Role title
+                  <input id="jobTitle" name="title" placeholder="Senior Product Engineer" required />
+                </label>
+                <label>
+                  Company
+                  <input id="jobCompany" name="company" placeholder="Acme AI" required />
+                </label>
+                <label>
+                  Source URL
+                  <input id="jobUrl" name="url" type="url" placeholder="https://jobs.example.com/role" />
+                </label>
+                <label>
+                  Job description
+                  <textarea id="jobDescription" name="description" rows="8" placeholder="Paste the posting, recruiter note, or role summary here." required></textarea>
+                </label>
+                <div class="form-row">
+                  <label>
+                    Compensation
+                    <input id="jobComp" name="comp" placeholder="$160k - $210k" />
+                  </label>
+                  <label>
+                    Location
+                    <input id="jobLocation" name="location" placeholder="Remote US" />
+                  </label>
+                </div>
+                <button class="primary-button full-width" type="submit">Evaluate and add to tracker</button>
+              </form>
+            </section>
+
+            <section class="score-panel">
+              <div class="score-ring" aria-label="Best score">
+                <span id="bestScore">--</span>
+                <small>best match</small>
+              </div>
+              <div>
+                <p class="eyebrow">Next best action</p>
+                <h3 id="nextActionTitle">Build your first lead</h3>
+                <p id="nextActionCopy">Once roles are in the system, the agent will rank, draft, and route them through your pipeline.</p>
+              </div>
+              <div class="metric-grid">
+                <div>
+                  <strong id="metricScanned">0</strong>
+                  <span>scanned</span>
+                </div>
+                <div>
+                  <strong id="metricReady">0</strong>
+                  <span>ready</span>
+                </div>
+                <div>
+                  <strong id="metricApplied">0</strong>
+                  <span>applied</span>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <section class="agent-config-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Agent intelligence</p>
+                <h3>Orchestrator provider</h3>
+              </div>
+              <div class="heading-actions">
+                <span class="quiet-pill">Ollama default</span>
+                <button class="help-button" data-help-topic="agent" type="button" aria-label="Help with agent provider settings">?</button>
+              </div>
+            </div>
+            <form id="agentConfigForm" class="agent-config-form">
+              <label>
+                Provider
+                <select id="agentProvider" name="provider">
+                  <option value="ollama">Ollama</option>
+                  <option value="openai">OpenAI</option>
+                  <option value="claude">Claude</option>
+                  <option value="gemini">Gemini</option>
+                </select>
+              </label>
+              <label>
+                Model
+                <input id="agentModel" name="model" placeholder="llama3.1:8b" />
+              </label>
+              <label>
+                Provider base URL
+                <input id="agentBaseUrl" name="baseUrl" placeholder="Use orchestrator default" />
+              </label>
+              <label>
+                API key for this session
+                <input id="agentApiKey" name="apiKey" type="password" placeholder="Optional; env vars are preferred" autocomplete="off" />
+              </label>
+              <div class="agent-config-copy">
+                <p id="agentProviderHelp">Ollama runs locally by default.</p>
+                <p id="agentConnectionStatus" data-tone="neutral">Provider ready.</p>
+              </div>
+              <div class="card-actions">
+                <button class="primary-button" id="testAgentButton" type="button">Test agent</button>
+                <button class="ghost-button" id="saveAgentConfigButton" type="button">Save settings</button>
+              </div>
+              <div class="ollama-tools" id="ollamaTools">
+                <div>
+                  <strong>Ollama models</strong>
+                  <p>Type any Ollama model name above, pull it if needed, then run the agent with that model.</p>
+                </div>
+                <div class="card-actions">
+                  <button class="ghost-button" id="listOllamaModelsButton" type="button">List models</button>
+                  <button class="ghost-button" id="pullOllamaModelButton" type="button">Pull model</button>
+                </div>
+                <div class="model-list" id="ollamaModelList">No models loaded yet.</div>
+              </div>
+            </form>
+          </section>
+
+          <section class="agent-timeline">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Agent plan</p>
+                <h3>What the system does for each role</h3>
+              </div>
+              <button class="help-button" data-help-topic="workflow" type="button" aria-label="Help with the workflow">?</button>
+            </div>
+            <div class="timeline-steps" id="timelineSteps"></div>
+          </section>
+        </section>
+
+        <section class="view-panel" id="scannerView" data-view-panel="scanner">
+          <div class="scanner-hero">
+            <div class="scanner-hero-copy">
+              <p class="eyebrow">Scanner</p>
+              <h3>Focused source scan</h3>
+              <p id="scanFilterSummary">Add profile signals and active sources before scanning.</p>
+              <div class="scanner-brief-tags" id="scanBriefTags"></div>
+            </div>
+            <div class="scanner-command">
+              <div class="scanner-metric-grid">
+                <div>
+                  <strong id="scanMetricSources">0</strong>
+                  <span>sources</span>
+                </div>
+                <div>
+                  <strong id="scanMetricIntent">0</strong>
+                  <span>intent terms</span>
+                </div>
+                <div>
+                  <strong id="scanMetricExclusions">0</strong>
+                  <span>exclusions</span>
+                </div>
+                <div>
+                  <strong id="scanMetricRemote">Off</strong>
+                  <span>remote only</span>
+                </div>
+              </div>
+              <div class="scanner-actions">
+                <button class="help-button" data-help-topic="scanner" type="button" aria-label="Help with scanning">?</button>
+                <button class="primary-button" id="scanButton" type="button">Scan active sites</button>
+              </div>
+            </div>
+          </div>
+          <div class="scanner-layout">
+            <aside class="scanner-panel scanner-brief-panel">
+              <div class="scanner-panel-heading">
+                <div>
+                  <p class="eyebrow">Search brief</p>
+                  <h4>Profile constraints</h4>
+                </div>
+                <button class="ghost-button" id="scanProfileButton" type="button">Edit profile</button>
+              </div>
+              <div class="scan-brief-list" id="scanBriefList"></div>
+            </aside>
+            <section class="scanner-panel scanner-queue-panel">
+              <div class="scanner-panel-heading">
+                <div>
+                  <p class="eyebrow">Source queue</p>
+                  <h4>Searches ready to run</h4>
+                </div>
+                <button class="ghost-button" id="scanSourcesButton" type="button">Manage sources</button>
+              </div>
+              <div class="source-strip" id="activeSourceStrip"></div>
+              <div class="scan-source-list" id="scanResults"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view-panel" id="raterView" data-view-panel="rater">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Rater</p>
+              <h3>Ranked job evaluations</h3>
+            </div>
+            <select id="ratingFilter" aria-label="Filter rated jobs">
+              <option value="all">All statuses</option>
+              <option value="ready">Ready</option>
+              <option value="watch">Watch</option>
+              <option value="pass">Pass</option>
+            </select>
+            <button class="help-button" data-help-topic="rater" type="button" aria-label="Help with rated results">?</button>
+            <button class="ghost-button" id="newSearchButton" type="button">Clear Results</button>
+          </div>
+          <div class="review-layout">
+            <div class="job-list" id="ratedJobs"></div>
+            <aside class="detail-panel" id="jobDetailPanel">
+              <p class="eyebrow">Job details</p>
+              <h3 id="detailTitle">Select a posting</h3>
+              <p id="detailMeta">Click any job in the list to inspect the full posting, source, score, and agent notes.</p>
+              <div class="detail-nav" id="detailNav"></div>
+              <div class="detail-grid" id="detailStats"></div>
+              <div class="tag-row" id="detailTags"></div>
+              <div class="detail-accordion" id="detailAccordion"></div>
+              <div class="card-actions" id="detailActions"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view-panel" id="applierView" data-view-panel="applier">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Applier</p>
+              <h3>Application packs</h3>
+            </div>
+            <button class="help-button" data-help-topic="applier" type="button" aria-label="Help with application packs">?</button>
+          </div>
+          <div class="split-layout">
+            <div class="job-list" id="applyJobs"></div>
+            <section class="draft-panel">
+              <p class="eyebrow">Selected draft</p>
+              <h3 id="draftTitle">Pick a ready role</h3>
+              <pre id="draftContent">The agent will assemble a cover note, resume keywords, recruiter message, and interview prep checklist.</pre>
+            </section>
+          </div>
+        </section>
+
+        <section class="view-panel" id="trackerView" data-view-panel="tracker">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Tracker</p>
+              <h3>Pipeline board</h3>
+            </div>
+            <button class="help-button" data-help-topic="tracker" type="button" aria-label="Help with the tracker">?</button>
+            <button class="ghost-button" id="resetButton" type="button">Reset demo data</button>
+          </div>
+          <div class="kanban" id="trackerBoard"></div>
+        </section>
+
+        <section class="view-panel" id="profileView" data-view-panel="profile">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Profile</p>
+              <h3>Resume and search preferences</h3>
+            </div>
+            <button class="help-button" data-help-topic="profile" type="button" aria-label="Help with profile setup">?</button>
+            <button class="primary-button" id="saveProfileButton" type="button">Save profile</button>
+          </div>
+          <div class="profile-grid">
+            <section class="intake-panel">
+              <form id="profileForm" class="job-form">
+                <div class="tip-box compact-tip">
+                  <strong>Where to describe the job search</strong>
+                  <p>Target titles and the Search brief tell the agent what to look for. Exclusions tell it what to keep out of returned scan results.</p>
+                </div>
+                <div class="form-row">
+                  <label>
+                    Full name
+                    <input id="profileName" name="name" placeholder="Jane Candidate" />
+                  </label>
+                  <label>
+                    Email
+                    <input id="profileEmail" name="email" type="email" placeholder="jane@example.com" />
+                  </label>
+                </div>
+	                <div class="form-row">
+	                  <label>
+	                    Target titles
+	                    <input id="profileTitles" name="targetTitles" placeholder="AI Product Engineer, Full Stack Engineer" />
+	                    <span class="field-hint">Use real market titles you would accept. Avoid only aspirational labels like builder unless paired with searchable titles.</span>
+	                  </label>
+	                  <label>
+	                    Location preference
+	                    <input id="profileLocation" name="location" placeholder="Remote US, Chicago hybrid" />
+	                    <span class="field-hint">Use values like Remote US, Remote North America, Chicago hybrid, or open to relocation.</span>
+	                  </label>
+	                </div>
+	                <label class="checkbox-row">
+	                  <input id="profileRemoteOnly" name="remoteOnly" type="checkbox" />
+	                  Remote only positions
+	                </label>
+	                <div class="field-group">
+	                  <div>
+	                    <p class="eyebrow">Search brief</p>
+                    <h4>What should the agent look for?</h4>
+                  </div>
+                  <label>
+                    Desired keywords
+                    <input id="profileDesiredKeywords" name="desiredKeywords" placeholder="agentic workflows, developer tools, AI product, internal tools" />
+                    <span class="field-hint">Soft signals. Any matching term can help a job surface and rank higher.</span>
+                  </label>
+                  <label>
+                    Required keywords
+                    <input id="profileRequiredKeywords" name="requiredKeywords" placeholder="remote, TypeScript, AI" />
+                    <span class="field-hint">Hard gate. Every required keyword must appear, so leave this empty until the scan is healthy.</span>
+                  </label>
+                  <label>
+                    Preferred industries or domains
+                    <input id="profilePreferredIndustries" name="preferredIndustries" placeholder="developer tools, civic tech, healthcare ops, productivity" />
+                    <span class="field-hint">Soft domain preference, useful for nudging scores without hiding otherwise good jobs.</span>
+                  </label>
+                </div>
+                <div class="field-group exclusion-group">
+                  <div>
+                    <p class="eyebrow">Exclusions</p>
+                    <h4>What should stay out of results?</h4>
+                  </div>
+                  <label>
+                    Exclude keywords
+                    <input id="profileExcludedKeywords" name="excludedKeywords" placeholder="crypto, blockchain, sales, embedded, unpaid, contract only" />
+                    <span class="field-hint">Hard blockers. Put roles you never want here, like solutions architect, forward deployed, pre-sales, or customer success.</span>
+                  </label>
+                  <div class="form-row">
+                    <label>
+                      Exclude companies
+                      <input id="profileExcludedCompanies" name="excludedCompanies" placeholder="Company A, Company B" />
+                    </label>
+                    <label>
+                      Exclude locations
+                      <input id="profileExcludedLocations" name="excludedLocations" placeholder="onsite only, New York, London" />
+                    </label>
+                  </div>
+                  <label>
+                    Exclude industries or domains
+                    <input id="profileExcludedIndustries" name="excludedIndustries" placeholder="adtech, gambling, defense, staffing agencies" />
+                  </label>
+                </div>
+                <div class="form-row">
+                  <label>
+                    Compensation target
+                    <input id="profileComp" name="compTarget" placeholder="$150k+" />
+                  </label>
+                  <label>
+                    Work authorization
+                    <input id="profileAuth" name="workAuth" placeholder="US citizen, no sponsorship needed" />
+                  </label>
+                </div>
+                <label>
+                  Core skills
+                  <input id="profileSkills" name="skills" placeholder="React, TypeScript, Python, agents, automation" />
+                  <span class="field-hint">Supporting evidence only. Skills help ranking but should not replace target titles and desired keywords.</span>
+                </label>
+                <label>
+                  Resume upload
+                  <input id="resumeUpload" type="file" accept=".txt,.md,.text,.json,.pdf,.doc,.docx" />
+                </label>
+                <label>
+                  Resume text
+                  <textarea id="resumeText" name="resumeText" rows="14" placeholder="Paste a resume or upload a text/markdown resume. PDF/DOC uploads are remembered by name, but this browser-only MVP needs text to tailor scoring and drafts."></textarea>
+                </label>
+                <label>
+                  Personal positioning
+                  <textarea id="profileSummary" name="summary" rows="4" placeholder="Short pitch, preferred role shape, industries, and constraints."></textarea>
+                </label>
+              </form>
+            </section>
+            <section class="score-panel profile-summary-panel">
+              <div>
+                <p class="eyebrow">Profile signal</p>
+                <h3 id="profileCompletenessTitle">No profile saved</h3>
+                <p id="profileCompletenessCopy">Add a resume and preferences so scans, ratings, CV drafts, and application notes can be personalized.</p>
+              </div>
+              <div class="metric-grid">
+                <div>
+                  <strong id="resumeWordCount">0</strong>
+                  <span>resume words</span>
+                </div>
+                <div>
+                  <strong id="profileSkillCount">0</strong>
+                  <span>skills</span>
+                </div>
+                <div>
+                  <strong id="profileTitleCount">0</strong>
+                  <span>targets</span>
+                </div>
+              </div>
+              <div class="agent-note" id="profileAgentNote">The agent will cite this profile when ranking jobs and drafting application material.</div>
+              <div class="profile-help-card" id="profileTipsCard">
+                <div>
+                  <p class="eyebrow">Profile check</p>
+                  <h4>Why results may be low</h4>
+                </div>
+                <ul id="profileTipsList" class="profile-tips-list"></ul>
+              </div>
+              <div class="profile-help-card">
+                <div>
+                  <p class="eyebrow">Good starter shape</p>
+                  <h4>For AI builder / platform roles</h4>
+                </div>
+                <dl class="profile-example-list">
+                  <div>
+                    <dt>Target titles</dt>
+                    <dd>AI Systems Engineer, AI Automation Engineer, Developer Productivity Engineer, Platform Engineer, Internal Tools Engineer</dd>
+                  </div>
+                  <div>
+                    <dt>Desired keywords</dt>
+                    <dd>Claude, Codex, Gemini, LLM, automation, agentic DevOps, infrastructure automation, developer tools, internal tools, Linux</dd>
+                  </div>
+                  <div>
+                    <dt>Exclude keywords</dt>
+                    <dd>solutions architect, solutions engineer, forward deployed, customer engineer, sales engineer, pre-sales, customer success</dd>
+                  </div>
+                </dl>
+              </div>
+              <div class="profile-help-card">
+                <div>
+                  <p class="eyebrow">Matching rules</p>
+                  <h4>How the fields behave</h4>
+                </div>
+                <ul class="profile-tips-list">
+                  <li><strong>Target titles</strong><span>Primary role-shape anchors. Use titles you would actually click.</span></li>
+                  <li><strong>Desired keywords</strong><span>Soft OR-style boosts. A job can match any of them.</span></li>
+                  <li><strong>Required keywords</strong><span>Hard AND-style filters. Use sparingly.</span></li>
+                  <li><strong>Exclusions</strong><span>Hard blockers that remove jobs before rating.</span></li>
+                  <li><strong>Resume and skills</strong><span>Supporting evidence, not the main search direction.</span></li>
+                </ul>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view-panel" id="sourcesView" data-view-panel="sources">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Sources</p>
+              <h3>Job search sites</h3>
+            </div>
+            <button class="help-button" data-help-topic="sources" type="button" aria-label="Help with search sources">?</button>
+          </div>
+          <div class="tip-box">
+            <strong>Sources vs. search brief</strong>
+            <p>Add, edit, disable, or delete sites here. Put role criteria and unwanted terms in Profile so the same preferences apply across every source.</p>
+          </div>
+          <div class="source-layout">
+            <section class="intake-panel">
+              <form id="sourceForm" class="job-form">
+                <input type="hidden" id="sourceId" name="id" />
+                <div class="form-row">
+                  <label>
+                    Site name
+                    <input id="sourceName" name="name" placeholder="Greenhouse AI search" required />
+                  </label>
+                  <label>
+                    Type
+                    <select id="sourceType" name="type">
+                      <option value="Search">Search query</option>
+                      <option value="ATS">ATS</option>
+                      <option value="Board">Job board</option>
+                      <option value="Company">Company</option>
+                      <option value="Custom">Custom search</option>
+                    </select>
+                  </label>
+                </div>
+                <label>
+                  Search URL
+                  <input id="sourceUrl" name="url" type="url" placeholder="https://boards.greenhouse.io/?q={query}" required />
+                </label>
+                <label>
+                  Default query
+                  <input id="sourceQuery" name="query" placeholder="AI product engineer remote" />
+                </label>
+                <label>
+                  Country or region
+                  <input id="sourceCountry" name="country" placeholder="US, UK, EU, Canada, Global" />
+                </label>
+                <label>
+                  Notes
+                  <textarea id="sourceNotes" name="notes" rows="3" placeholder="Anything the agent should know about this source."></textarea>
+                </label>
+                <label class="checkbox-row">
+                  <input id="sourceEnabled" name="enabled" type="checkbox" checked />
+                  Enabled for scans
+                </label>
+                <div class="form-row">
+                  <button class="primary-button" type="submit">Save source</button>
+                  <button class="ghost-button" id="clearSourceButton" type="button">New source</button>
+                </div>
+              </form>
+            </section>
+            <section class="job-list" id="sourceList"></section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal-backdrop" id="onboardingModal" hidden>
+      <section class="modal-card onboarding-card" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle">
+        <button class="modal-close" id="onboardingCloseButton" type="button" aria-label="Close onboarding">×</button>
+        <div class="onboarding-progress" id="onboardingProgress"></div>
+        <p class="eyebrow" id="onboardingEyebrow">Getting started</p>
+        <h2 id="onboardingTitle">Welcome to JobHunter</h2>
+        <p id="onboardingBody">Set up your profile, scan sources, rate roles, and move applications through a simple pipeline.</p>
+        <ul class="onboarding-list" id="onboardingList"></ul>
+        <div class="modal-actions">
+          <button class="ghost-button" id="onboardingSkipButton" type="button">Skip</button>
+          <button class="ghost-button" id="onboardingBackButton" type="button">Back</button>
+          <button class="primary-button" id="onboardingNextButton" type="button">Next</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="modal-backdrop" id="helpModal" hidden>
+      <section class="modal-card help-card" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+        <button class="modal-close" id="helpCloseButton" type="button" aria-label="Close help">×</button>
+        <p class="eyebrow" id="helpEyebrow">Workflow help</p>
+        <h2 id="helpTitle">How this works</h2>
+        <p id="helpBody">Use the workflow guide to decide what to do next.</p>
+        <ul class="help-topic-list" id="helpList"></ul>
+        <div class="help-next-step" id="helpNextStep"></div>
+        <div class="modal-actions">
+          <button class="ghost-button" id="helpOnboardingButton" type="button">Open onboarding</button>
+          <button class="primary-button" id="helpDoneButton" type="button">Got it</button>
+        </div>
+      </section>
+    </div>
+
+    <template id="jobCardTemplate">
+      <article class="job-card">
+        <div class="job-card-header">
+          <div>
+            <h4></h4>
+            <p></p>
+          </div>
+          <span class="score-badge"></span>
+        </div>
+        <div class="tag-row"></div>
+        <p class="job-reason"></p>
+        <div class="card-actions"></div>
+      </article>
+    </template>
+
+    <script src="./career-ops-sources.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

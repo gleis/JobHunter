@@ -1,0 +1,30 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: jobhunter-ollama
+    ports:
+      - "127.0.0.1:11434:11434"
+    volumes:
+      - ${JOBHUNTER_OLLAMA_STORE:-${HOME}/.jobhunter/ollama}:/root/.ollama
+    environment:
+      OLLAMA_HOST: 0.0.0.0:11434
+
+  jobhunter-orchestrator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: jobhunter-orchestrator
+    container_name: jobhunter-orchestrator
+    ports:
+      - "127.0.0.1:8090:8090"
+    volumes:
+      - ${JOBHUNTER_DATA_STORE:-${HOME}/.jobhunter/data}:/data
+    env_file:
+      - .env
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8090
+      DATA_DIR: /data
+      OLLAMA_BASE_URL: http://ollama:11434
+    depends_on:
+      - ollama
