@@ -96,7 +96,7 @@ The orchestrator is `server.js`. It serves the app and brokers provider calls so
 Default provider:
 
 - Ollama
-- Model: `llama3.1:8b`
+- Model: `qwen3:8b`
 - Base URL: `http://127.0.0.1:11434`
 
 Optional provider env vars:
@@ -172,7 +172,7 @@ Stop it with:
 Pull or list models from the host through the published Ollama API:
 
 ```bash
-./scripts/ollama-model.sh pull llama3.1:8b
+./scripts/ollama-model.sh pull qwen3:8b
 ./scripts/ollama-model.sh list
 ```
 
@@ -236,3 +236,11 @@ compose.yaml           Docker Compose fallback
 ## Product Principle
 
 The app should feel like a calm career desk: the system searches, sorts, drafts, and remembers; the user decides what gets sent.
+
+## Maintenance (2026-11-06)
+
+Use Node 24 LTS (`nvm use`). State is transactionally stored in `DATA_DIR/state.sqlite3` with WAL, full synchronous commits, and a busy timeout. On first use, an existing `state.json` is imported once and preserved as a backup. The `jobs` table supports queries by status. Full snapshot writes remain last-writer-wins; SQLite prevents torn writes, not conflicting user edits. Browser localStorage remains the offline mirror. Back up using SQLite backup tooling rather than copying only the database during WAL writes.
+
+Browser code is split by responsibility under `modules/` (profile, scanning, rating, application packs, tracking, persistence). These classic scripts load in document order before `app.js`, which retains shared state and event wiring. No bundler or browser dependency is required.
+
+The 2026-11-06 source refresh checked 46 seeded Greenhouse/Lever endpoints. Fifteen had moved or returned 404. Verified Ada/CoreWeave slug migrations keep direct scanning; other verified careers pages use explicit manual web search, and the blocked Clarity AI replacement is disabled pending review. Run `node scripts/verify-sources.js` for a read-only live check of enabled direct ATS feeds. Saved user-customized sources are preserved; review them separately if they still contain old URLs.

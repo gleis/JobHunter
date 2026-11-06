@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "node --test",
-    "check": "node --check server.js && node --check app.js && node --check career-ops-sources.js && npm test",
+    "check": "node scripts/check.js && npm test",
     "ollama:apple": "./scripts/run-ollama.sh apple",
     "ollama:docker": "./scripts/run-ollama.sh docker",
     "ollama:pull": "./scripts/ollama-model.sh pull",
@@ -15,5 +15,9 @@
     "container:apple:run": "./scripts/run-orchestrator.sh apple",
     "container:docker:build": "docker build --tag jobhunter-orchestrator --file Dockerfile .",
     "container:docker:run": "./scripts/run-orchestrator.sh docker"
-  }
+  },
+  "engines": {
+    "node": ">=24.22.2 <25"
+  },
+  "license": "MIT"
 }

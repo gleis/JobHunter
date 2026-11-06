@@ -168,7 +168,7 @@ test("state API saves and returns persisted profile data", async () => {
         jobs: [job()],
         sources: [],
         deletedSourceIds: [],
-        agentConfig: { provider: "ollama", model: "llama3.1:8b" }
+        agentConfig: { provider: "ollama", model: "qwen3:8b" }
       }
     };
     const saveResponse = await invoke(server, { method: "POST", url: "/api/state", body: payload });

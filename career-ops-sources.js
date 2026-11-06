@@ -590,10 +590,10 @@ const careerOpsSources = [
   {
     "id": "career_ops_company_parloa",
     "name": "Parloa",
-    "type": "ATS",
-    "url": "https://job-boards.eu.greenhouse.io/parloa",
-    "query": "Parloa careers",
-    "notes": "Berlin EMEA. Voice AI enterprise. API: https://boards-api.greenhouse.io/v1/boards/parloa/jobs",
+    "type": "Company",
+    "url": "https://www.parloa.com/company/careers/",
+    "query": "site:www.parloa.com careers Parloa",
+    "notes": "Careers URL rechecked 2026-11-06. Previous direct ATS endpoint returned 404. Use manual web search until this ATS is supported. Scan method: websearch",
     "enabled": true
   },
   {
@@ -680,10 +680,10 @@ const careerOpsSources = [
   {
     "id": "career_ops_company_temporal",
     "name": "Temporal",
-    "type": "ATS",
-    "url": "https://job-boards.greenhouse.io/temporal",
-    "query": "Temporal careers",
-    "notes": "Workflow orchestration. API: https://boards-api.greenhouse.io/v1/boards/temporal/jobs",
+    "type": "Company",
+    "url": "https://temporal.io/careers",
+    "query": "site:temporal.io careers Temporal",
+    "notes": "Careers URL rechecked 2026-11-06. Previous direct ATS endpoint returned 404. Use manual web search until this ATS is supported. Scan method: websearch",
     "enabled": true
   },
   {
@@ -698,10 +698,10 @@ const careerOpsSources = [
   {
     "id": "career_ops_company_runpod",
     "name": "RunPod",
-    "type": "ATS",
-    "url": "https://job-boards.greenhouse.io/runpod",
-    "query": "RunPod careers",
-    "notes": "GPU cloud for AI. API: https://boards-api.greenhouse.io/v1/boards/runpod/jobs",
+    "type": "Company",
+    "url": "https://www.runpod.io/careers",
+    "query": "site:www.runpod.io careers RunPod",
+    "notes": "Careers URL rechecked 2026-11-06. Previous direct ATS endpoint returned 404. Use manual web search until this ATS is supported. Scan method: websearch",
     "enabled": true
   },
   {
@@ -716,10 +716,10 @@ const careerOpsSources = [
   {
     "id": "career_ops_company_ada",
     "name": "Ada",
-    "type": "ATS",
-    "url": "https://job-boards.greenhouse.io/ada",
+    "type": "Company",
+    "url": "https://job-boards.greenhouse.io/ada18",
     "query": "\"ada.cx\" OR \"ada\" \"AI\" \"Solutions\" OR \"Engineer\" site:jobs.ashbyhq.com OR site:job-boards.greenhouse.io",
-    "notes": "Toronto + remote. AI customer service. Scan method: websearch",
+    "notes": "Greenhouse API and jobs array verified 2026-11-06: https://boards-api.greenhouse.io/v1/boards/ada18/jobs. Source slug migrated from the previous board.",
     "enabled": true
   },
   {
@@ -905,19 +905,19 @@ const careerOpsSources = [
   {
     "id": "career_ops_company_mistral_ai",
     "name": "Mistral AI",
-    "type": "ATS",
-    "url": "https://jobs.lever.co/mistral",
-    "query": "Mistral AI careers",
-    "notes": "Paris. European AI lab.",
+    "type": "Company",
+    "url": "https://mistral.ai/careers/",
+    "query": "site:mistral.ai careers Mistral AI",
+    "notes": "Careers URL rechecked 2026-11-06. Previous direct ATS endpoint returned 404. Use manual web search until this ATS is supported. Scan method: websearch",
     "enabled": true
   },
   {
     "id": "career_ops_company_weights_biases",
     "name": "Weights & Biases",
-    "type": "ATS",
-    "url": "https://jobs.lever.co/wandb",
-    "query": "Weights & Biases careers",
-    "notes": "MLOps platform.",
+    "type": "Company",
+    "url": "https://job-boards.greenhouse.io/coreweave",
+    "query": "site:www.coreweave.com careers Weights & Biases",
+    "notes": "Greenhouse API and jobs array verified 2026-11-06: https://boards-api.greenhouse.io/v1/boards/coreweave/jobs. Source slug migrated from the previous board.",
     "enabled": true
   },
   {
@@ -977,10 +977,10 @@ const careerOpsSources = [
   {
     "id": "career_ops_company_sanctuary_ai",
     "name": "Sanctuary AI",
-    "type": "ATS",
-    "url": "https://jobs.lever.co/sanctuary",
-    "query": "Sanctuary AI careers",
-    "notes": "Vancouver. Humanoid robotics and embodied AI.",
+    "type": "Company",
+    "url": "https://sanctuary.ai/careers/",
+    "query": "site:sanctuary.ai careers Sanctuary AI",
+    "notes": "Careers URL rechecked 2026-11-06. Previous direct ATS endpoint returned 404. Use manual web search until this ATS is supported. Scan method: websearch",
     "enabled": true
   },
   {
@@ -995,10 +995,10 @@ const careerOpsSources = [
   {
     "id": "career_ops_company_factorial",
     "name": "Factorial",
-    "type": "ATS",
-    "url": "https://job-boards.greenhouse.io/factorial",
-    "query": "site:jobs.greenhouse.io/factorial",
-    "notes": "Barcelona. HR SaaS unicorn. Scan method: websearch",
+    "type": "Company",
+    "url": "https://careers.factorial.com/",
+    "query": "site:careers.factorial.com careers Factorial",
+    "notes": "Careers URL rechecked 2026-11-06. Previous direct ATS endpoint returned 404. Use manual web search until this ATS is supported. Scan method: websearch",
     "enabled": true
   },
   {
@@ -1025,8 +1025,8 @@ const careerOpsSources = [
     "type": "ATS",
     "url": "https://jobs.lever.co/clarity-ai",
     "query": "site:clarity.ai/careers OR site:jobs.lever.co/clarity-ai",
-    "notes": "Madrid/Remote. Sustainability analytics with AI. Scan method: websearch",
-    "enabled": true
+    "notes": "Direct ATS endpoint returned 404 on 2026-11-06; replacement could not be verified because the careers site blocked automated access. Disabled by default; review the company careers page manually.",
+    "enabled": false
   },
   {
     "id": "career_ops_company_travelperk",
@@ -1058,10 +1058,10 @@ const careerOpsSources = [
   {
     "id": "career_ops_company_black_forest_labs",
     "name": "Black Forest Labs",
-    "type": "ATS",
-    "url": "https://job-boards.greenhouse.io/blackforestlabs",
-    "query": "Black Forest Labs careers",
-    "notes": "Freiburg DE / SF. FLUX image models, ex-Stable Diffusion team. API: https://boards-api.greenhouse.io/v1/boards/blackforestlabs/jobs",
+    "type": "Company",
+    "url": "https://bfl.ai/careers",
+    "query": "site:bfl.ai careers Black Forest Labs",
+    "notes": "Careers URL rechecked 2026-11-06. Previous direct ATS endpoint returned 404. Use manual web search until this ATS is supported. Scan method: websearch",
     "enabled": true
   },
   {
@@ -1148,10 +1148,10 @@ const careerOpsSources = [
   {
     "id": "career_ops_company_forto",
     "name": "Forto",
-    "type": "ATS",
-    "url": "https://jobs.lever.co/forto",
-    "query": "Forto careers",
-    "notes": "Berlin DE. Digital freight forwarder, product & data roles, German + English.",
+    "type": "Company",
+    "url": "https://careers.forto.com/",
+    "query": "site:careers.forto.com careers Forto",
+    "notes": "Careers URL rechecked 2026-11-06. Previous direct ATS endpoint returned 404. Use manual web search until this ATS is supported. Scan method: websearch",
     "enabled": true
   },
   {
@@ -1211,10 +1211,10 @@ const careerOpsSources = [
   {
     "id": "career_ops_company_wayve",
     "name": "Wayve",
-    "type": "ATS",
-    "url": "https://job-boards.greenhouse.io/wayve",
-    "query": "Wayve careers",
-    "notes": "London UK. Embodied AI for self-driving, ML & robotics roles. API: https://boards-api.greenhouse.io/v1/boards/wayve/jobs",
+    "type": "Company",
+    "url": "https://wayve.ai/careers/",
+    "query": "site:wayve.ai careers Wayve",
+    "notes": "Careers URL rechecked 2026-11-06. Previous direct ATS endpoint returned 404. Use manual web search until this ATS is supported. Scan method: websearch",
     "enabled": true
   },
   {
@@ -1301,10 +1301,10 @@ const careerOpsSources = [
   {
     "id": "career_ops_company_vinted",
     "name": "Vinted",
-    "type": "ATS",
-    "url": "https://jobs.lever.co/vinted",
-    "query": "Vinted careers",
-    "notes": "Vilnius LT / Berlin. C2C marketplace unicorn, data science & ML roles.",
+    "type": "Company",
+    "url": "https://careers.vinted.com/",
+    "query": "site:careers.vinted.com careers Vinted",
+    "notes": "Careers URL rechecked 2026-11-06. Previous direct ATS endpoint returned 404. Use manual web search until this ATS is supported. Scan method: websearch",
     "enabled": true
   },
   {
@@ -1337,19 +1337,19 @@ const careerOpsSources = [
   {
     "id": "career_ops_company_runway",
     "name": "Runway",
-    "type": "ATS",
-    "url": "https://job-boards.greenhouse.io/runwayml",
-    "query": "Runway careers",
-    "notes": "Generative AI video and creative tooling platform. API: https://boards-api.greenhouse.io/v1/boards/runwayml/jobs",
+    "type": "Company",
+    "url": "https://runway.com/careers",
+    "query": "site:runway.com careers Runway",
+    "notes": "Careers URL rechecked 2026-11-06. Previous direct ATS endpoint returned 404. Use manual web search until this ATS is supported. Scan method: websearch",
     "enabled": true
   },
   {
     "id": "career_ops_company_hightouch",
     "name": "Hightouch",
-    "type": "ATS",
-    "url": "https://job-boards.greenhouse.io/hightouch",
-    "query": "Hightouch careers",
-    "notes": "Data activation platform with AI agents and solutions engineering roles. API: https://boards-api.greenhouse.io/v1/boards/hightouch/jobs",
+    "type": "Company",
+    "url": "https://hightouch.com/careers",
+    "query": "site:hightouch.com careers Hightouch",
+    "notes": "Careers URL rechecked 2026-11-06. Previous direct ATS endpoint returned 404. Use manual web search until this ATS is supported. Scan method: websearch",
     "enabled": true
   },
   {

@@ -7,13 +7,13 @@ const PORT = Number(process.env.PORT || 8090);
 const HOST = process.env.HOST || "0.0.0.0";
 const ROOT = __dirname;
 const DATA_DIR = process.env.DATA_DIR || path.join(ROOT, ".jobhunter-data");
-const STATE_FILE = path.join(DATA_DIR, "state.json");
+const { loadState, saveState } = require("./state-store").createStateStore(DATA_DIR);
 
 const providerDefaults = {
   ollama: {
     label: "Ollama",
     baseUrl: "http://127.0.0.1:11434",
-    model: "llama3.1:8b",
+    model: "qwen3:8b",
     envBaseUrl: "OLLAMA_BASE_URL"
   },
   openai: {
@@ -50,30 +50,6 @@ const mimeTypes = {
 function sendJson(res, status, payload) {
   res.writeHead(status, { "content-type": "application/json; charset=utf-8" });
   res.end(JSON.stringify(payload));
-}
-
-async function loadState() {
-  try {
-    const data = await fs.readFile(STATE_FILE, "utf8");
-    return JSON.parse(data);
-  } catch (error) {
-    if (error.code === "ENOENT") return {};
-    throw error;
-  }
-}
-
-async function saveState(state) {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  const payload = {
-    profile: state.profile || {},
-    jobs: Array.isArray(state.jobs) ? state.jobs : [],
-    sources: Array.isArray(state.sources) ? state.sources : [],
-    deletedSourceIds: Array.isArray(state.deletedSourceIds) ? state.deletedSourceIds : [],
-    agentConfig: state.agentConfig || {},
-    updatedAt: new Date().toISOString()
-  };
-  await fs.writeFile(STATE_FILE, `${JSON.stringify(payload, null, 2)}\n`);
-  return payload;
 }
 
 function readJson(req) {

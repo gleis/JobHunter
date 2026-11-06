@@ -2,7 +2,7 @@
 set -euo pipefail
 
 command="${1:-list}"
-model="${2:-${JOBHUNTER_OLLAMA_MODEL:-llama3.1:8b}}"
+model="${2:-${JOBHUNTER_OLLAMA_MODEL:-qwen3:8b}}"
 base_url="${OLLAMA_BASE_URL:-http://127.0.0.1:${OLLAMA_HOST_PORT:-11434}}"
 
 case "${command}" in
