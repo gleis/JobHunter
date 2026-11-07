@@ -10,7 +10,7 @@ jobs:
   node:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -26,7 +26,7 @@ jobs:
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: docker build -f deploy/secure/Ollama.Dockerfile -t jobhunter-ollama:review .
       - run: |
           docker run -d --name ollama-check -p 127.0.0.1:11434:11434 jobhunter-ollama:review
@@ -55,7 +55,7 @@ jobs:
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: |
           docker build -t jobhunter-app:review .
           docker run -d --name app-check -p 127.0.0.1:18090:8090 jobhunter-app:review
