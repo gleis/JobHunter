@@ -136,9 +136,9 @@ That local directory is ignored by Git.
 
 ## Apple Container First
 
-Apple Container is the preferred local container runtime for this project. The Apple stack starts two containers:
+Apple Container is the preferred local container runtime for this project. The first launch builds the maintained images locally and can take several minutes. The Apple stack starts two containers:
 
-- `jobhunter-ollama`, running the official `ollama/ollama` image.
+- `jobhunter-ollama`, running the maintained Ollama image built from the pinned source and runtime in `deploy/secure/Ollama.Dockerfile`.
 - `jobhunter-orchestrator`, running the JobHunter app and provider broker.
 
 ```bash
