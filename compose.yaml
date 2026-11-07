@@ -1,6 +1,9 @@
 services:
   ollama:
-    image: ollama/ollama:latest
+    image: jobhunter-ollama:0.40.15-maintenance
+    build:
+      context: .
+      dockerfile: deploy/secure/Ollama.Dockerfile
     container_name: jobhunter-ollama
     ports:
       - "127.0.0.1:11434:11434"
