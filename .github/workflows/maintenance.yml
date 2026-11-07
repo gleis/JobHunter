@@ -19,7 +19,11 @@ jobs:
       - run: npm run check
       - run: npm audit --audit-level=low
   ollama-image:
-    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-24.04, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -35,11 +39,41 @@ jobs:
           scanners: vuln
           format: json
           output: ollama-image.json
-          exit-code: '0'
+          exit-code: '1'
           ignore-unfixed: false
       - uses: actions/upload-artifact@v4
         with:
-          name: ollama-image-review
+          name: ollama-image-review-${{ runner.arch }}
           path: ollama-image.json
       - if: always()
         run: docker rm -f ollama-check
+  application-image:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-24.04, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          docker build -t jobhunter-app:review .
+          docker run -d --name app-check -p 127.0.0.1:18090:8090 jobhunter-app:review
+          for i in $(seq 1 60); do curl -fsS http://127.0.0.1:18090/ -o /tmp/page.html && break; sleep 1; done
+          grep -q JobHunter /tmp/page.html
+          docker exec app-check sh -ec '! command -v npm; ! command -v yarn'
+      - uses: aquasecurity/trivy-action@0.35.0
+        with:
+          version: v0.76.2
+          image-ref: jobhunter-app:review
+          scanners: vuln
+          format: json
+          output: application-image.json
+          exit-code: '1'
+          ignore-unfixed: false
+      - uses: actions/upload-artifact@v4
+        with:
+          name: application-image-review-${{ runner.arch }}
+          path: application-image.json
+      - if: always()
+        run: docker logs app-check; docker rm -f app-check
