@@ -32,7 +32,7 @@ jobs:
           docker run -d --name ollama-check -p 127.0.0.1:11434:11434 jobhunter-ollama:review
           for i in $(seq 1 60); do curl -f http://127.0.0.1:11434/api/version && break; sleep 1; done
           curl -f http://127.0.0.1:11434/api/tags
-      - uses: aquasecurity/trivy-action@0.35.0
+      - uses: aquasecurity/trivy-action@v0.36.0
         with:
           version: v0.76.2
           image-ref: jobhunter-ollama:review
@@ -62,7 +62,7 @@ jobs:
           for i in $(seq 1 60); do curl -fsS http://127.0.0.1:18090/ -o /tmp/page.html && break; sleep 1; done
           grep -q JobHunter /tmp/page.html
           docker exec app-check sh -ec '! command -v npm; ! command -v yarn'
-      - uses: aquasecurity/trivy-action@0.35.0
+      - uses: aquasecurity/trivy-action@v0.36.0
         with:
           version: v0.76.2
           image-ref: jobhunter-app:review
